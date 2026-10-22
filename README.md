@@ -96,8 +96,8 @@ Our prototype demonstrates the end-to-end user journey across all three ecosyste
 
 ### 2. Clone and Install Dependencies
 ```bash
-git clone https://github.com/T-ASTA/rmit-tidecloak-c2.git
-cd rmit-tidecloak-c2
+git clone https://github.com/DrexVN123/rmit_SGS_GOAT_C2.git
+cd rmit_SGS_GOAT_C2
 npm install
 ```
 
@@ -173,5 +173,5 @@ Executes the comprehensive suite of 42 automated tests validating FIFO queue rec
 * **Event:** RMIT GenAI & Cybersecurity Hackathon 2026
 * **Challenge:** Challenge 2 — Vibe code a working app with TideCloak
 * **Group Name:** `GDU_SGS_GOAT_C2`
-* **Repository:** `https://github.com/T-ASTA/rmit-tidecloak-c2`
+* **Repository:** `https://github.com/DrexVN123/rmit_SGS_GOAT_C2`
 * **Video:** `Video.mp4` (in root directory)
