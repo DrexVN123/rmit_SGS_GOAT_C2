@@ -4,3 +4,17 @@
 @media(max-width:520px){.shell{padding:0 14px}.topbar{height:65px}.top-actions{gap:8px}.auth-state{font-size:0}.auth-state i{width:8px;height:8px}.top-actions .button{font-size:10px;padding:9px 10px}.hero{display:block}.hero-card{margin-top:24px;width:100%}.course-grid,.registrar-grid,.compare-grid{grid-template-columns:1fr}.course-card h3{min-height:0}.demo-warning{align-items:flex-start}.toolbar>div:first-child{flex-wrap:wrap}.section-heading h2{font-size:21px}.form-grid{grid-template-columns:1fr}.form-grid .reason-field{grid-column:auto}.form-footer{align-items:flex-start;gap:10px;flex-direction:column}.blocked-card{align-items:flex-start;flex-direction:column}.position-card{flex-wrap:wrap;gap:10px}footer{gap:10px;flex-direction:column}.request-head h3{font-size:12px}}
 
 .group-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:#e4eee9;color:var(--green);border:1px solid #cbe0d6;letter-spacing:0.5px;margin-left:6px;font-family:'JetBrains Mono',monospace;}
+
+.batch-upload-card{background:white;border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin-bottom:18px}
+.batch-upload-header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.batch-upload-header h3{font:700 16px Manrope,sans-serif;letter-spacing:-.3px;margin:5px 0 4px}
+.batch-upload-header p{font-size:11px;color:var(--muted);margin:0}
+.upload-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.file-upload-btn{display:inline-flex;align-items:center;cursor:pointer}
+.batch-status-msg{margin-top:12px;padding:9px 12px;background:#e8f3ec;border:1px solid #cbe0d6;border-radius:7px;font-size:11px;color:var(--green);font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.batch-status-msg.error{background:#fbf0ec;border-color:#f1cfc6;color:#a84e36}
+.batch-dismiss-btn{background:none;border:none;color:inherit;font-size:16px;line-height:1;cursor:pointer;padding:0 4px}
+.capacity-input-group{display:flex;align-items:center;gap:5px}
+.stepper-btn{width:26px;height:26px;border-radius:6px;border:1px solid #dce4dd;background:#f4f6f1;color:var(--ink);font-size:14px;font-weight:700;display:grid;place-items:center;padding:0;line-height:1}
+.stepper-btn:hover:not(:disabled){background:#e6eee8;border-color:#b5c7bc}
+.stepper-btn:disabled{opacity:.4;cursor:not-allowed}

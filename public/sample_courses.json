@@ -1,0 +1,17 @@
+[
+  {
+    "code": "COSC3001",
+    "name": "Zero-Knowledge Systems & Protocols",
+    "capacity": 4
+  },
+  {
+    "code": "COSC3002",
+    "name": "Smart Contract Verification",
+    "capacity": 3
+  },
+  {
+    "code": "ISYS3414",
+    "name": "Database Systems",
+    "capacity": 5
+  }
+]

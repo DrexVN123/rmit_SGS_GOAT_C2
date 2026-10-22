@@ -62,11 +62,12 @@ Traditional IAM solutions (OAuth2/OIDC servers, centralized Keycloak) store mast
 Our prototype demonstrates the end-to-end user journey across all three ecosystem personas:
 
 1. **Student Journey (Avery Chen / Jordan Patel):**
-   * Browse available courses (`COMP3100`, `COSC2670`, `ISYS3414`, `COSC2408`).
+   * Browse available courses (`COMP3100`, `ISYS3414`, `COSC2408`).
    * One-click enrolment when seats are open, or automatic FIFO waitlist queueing when at capacity.
    * View live rank in the waitlist and review published reasons for approved exceptions.
 2. **Registrar Journey (Taylor Reed):**
-   * Adjust course capacities.
+   * Adjust course capacities interactively with instant real-time FIFO waitlist recalculation and available seat badge updates.
+   * **Batch Upload Catalog:** Upload JSON or CSV formatted course/class catalogs to dynamically add and merge offerings in real time.
    * **Privilege Escalation Test:** Click *"Attempt both overrides"* to simulate a rogue administrator trying to jump queue order or unilaterally seize control of the approver panel. The system immediately **intercepts, blocks, and logs** the attempted breach into the public audit ledger.
    * Submit legitimate exception requests with compulsory public justification.
 3. **Approver Panel Journey (Dr. Amara Okafor, Sam Williams, Alex Morgan):**
@@ -74,7 +75,7 @@ Our prototype demonstrates the end-to-end user journey across all three ecosyste
    * Requesters are blocked from voting on their own requests (anti-self-dealing).
    * Cast independent votes on pending exceptions; upon reaching 2 of 3 approvals, the exception is automatically applied.
 4. **TideCloak Authentication:**
-   * Full OIDC integration via `@tidecloak/react`. Users can log in directly with their decentralized TideCloak credentials.
+   * Full OIDC integration via `@tidecloak/react`. Users can log in directly with their decentralized TideCloak credentials, with automatic view role synchronization based on token claims.
 
 ---
 
@@ -121,6 +122,12 @@ Open [http://localhost:5173/](http://localhost:5173/) to interact with the worki
 
 *(Note: If the local Docker TideCloak instance is not running, FairEnrol automatically enters high-fidelity interactive demo mode with full simulation of roles, quorum voting, and audit trails).*
 
+### 5. Run Automated Test Suite
+```bash
+npm test
+```
+Executes the comprehensive suite of 42 automated tests validating FIFO queue recalculations, dynamic batch catalog ingestion (JSON/CSV), audit log consistency, and 2-of-3 threshold quorum governance.
+
 ---
 
 ## Repository Structure
@@ -128,12 +135,17 @@ Open [http://localhost:5173/](http://localhost:5173/) to interact with the worki
 ```
 ├── public/
 │   ├── silent-check-sso.html    # OIDC silent SSO check
+│   ├── sample_courses.csv       # Sample CSV batch catalog
+│   ├── sample_courses.json      # Sample JSON batch catalog
 │   └── tidecloak.json           # TideCloak client config
 ├── src/
 │   ├── App.jsx                  # Main FairEnrol dashboard & governance state machine
+│   ├── courseLogic.js           # Core FIFO, file parsing, and quorum logic
 │   ├── main.jsx                 # React root with TideCloakContextProvider
 │   ├── seed.json                # Seed courses and students
 │   └── style.css                # Polished design system
+├── tests/
+│   └── fairenrol.test.js        # 42 unit and adversarial integration tests
 ├── Video.mp4                    # Complete walkthrough video of the working app
 ├── index.html                   # HTML entry point
 ├── package.json                 # Dependencies (@tidecloak/react, react 19, vite)

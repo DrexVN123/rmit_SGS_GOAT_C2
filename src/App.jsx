@@ -1,6 +1,15 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { useTideCloak } from "@tidecloak/react";
 import seed from "./seed.json";
+import {
+  actionNames,
+  personName,
+  recalculateCourseEnrolment,
+  parseCoursesFile,
+  reducer,
+  isSelfRequest,
+  normalizePersonName,
+} from "./courseLogic.js";
 
 const initialPanel = [
   { id: "approver-1", name: "Dr. Amara Okafor", title: "Head of School" },
@@ -9,115 +18,6 @@ const initialPanel = [
 ];
 
 const demoRegistrar = { id: "registrar-1", name: "Taylor Reed", title: "Registrar" };
-const actionNames = {
-  force: "Force enrol",
-  jump: "Jump the queue",
-  remove: "Remove a student",
-  panel: "Change approver panel",
-};
-
-function audit(state, actor, action, reason) {
-  return {
-    ...state,
-    audit: [{
-      id: `${Date.now()}-${Math.random()}`,
-      time: new Date().toISOString(),
-      actor,
-      action,
-      reason,
-    }, ...state.audit],
-  };
-}
-
-function applyApprovedAction(state, request) {
-  if (request.kind === "panel") {
-    return {
-      ...state,
-      panel: [...state.panel.filter((member) => member.id !== request.replaceMember.id), request.candidate],
-    };
-  }
-
-  const courses = state.courses.map((course) => {
-    if (course.id !== request.courseId) return course;
-    const enrolled = course.enrolled.filter((id) => id !== request.studentId);
-    const waitlist = course.waitlist.filter((id) => id !== request.studentId);
-    if (request.kind === "force") {
-      return { ...course, enrolled: [...enrolled, request.studentId], waitlist };
-    }
-    if (request.kind === "jump") {
-      return { ...course, enrolled, waitlist: [request.studentId, ...waitlist] };
-    }
-    return { ...course, enrolled, waitlist };
-  });
-  return { ...state, courses };
-}
-
-function reducer(state, event) {
-  if (event.type === "enrol") {
-    const course = state.courses.find((item) => item.id === event.courseId);
-    if (course.enrolled.includes(event.studentId) || course.waitlist.includes(event.studentId)) return state;
-    const hasSeat = course.enrolled.length < course.capacity;
-    const courses = state.courses.map((item) => item.id !== course.id ? item : hasSeat
-      ? { ...item, enrolled: [...item.enrolled, event.studentId] }
-      : { ...item, waitlist: [...item.waitlist, event.studentId] });
-    return audit({ ...state, courses }, event.actor, hasSeat ? "Enrolment recorded" : "Joined waitlist",
-      hasSeat ? `${event.studentName} enrolled in ${course.code}.` : `${event.studentName} joined ${course.code}'s waitlist in FIFO order.`);
-  }
-  if (event.type === "capacity") {
-    const courses = state.courses.map((course) => course.id === event.courseId
-      ? { ...course, capacity: Math.max(1, Number(event.capacity) || 1) }
-      : course);
-    const course = state.courses.find((item) => item.id === event.courseId);
-    return audit({ ...state, courses }, event.actor, "Seat limit updated",
-      `${course.code} seat limit set to ${event.capacity}.`);
-  }
-  if (event.type === "blocked") {
-    return audit(state, event.actor, "Blocked registrar override attempt", event.reason);
-  }
-  if (event.type === "request") {
-    const request = { ...event.request, approvals: [], status: "pending", id: `${Date.now()}-${Math.random()}` };
-    return audit({ ...state, requests: [request, ...state.requests] }, request.requester,
-      `${actionNames[request.kind]} requested`, request.reason);
-  }
-  if (event.type === "vote") {
-    const request = state.requests.find((item) => item.id === event.requestId);
-    if (!request || request.status !== "pending") return state;
-    if (request.requester === event.approver.name || !state.panel.some((member) => member.id === event.approver.id)
-      || request.approvals.some((member) => member.id === event.approver.id)) {
-      return audit(state, event.approver.name, "Approval blocked",
-        "Requester cannot approve their own request; panel members may vote only once.");
-    }
-    const approvals = [...request.approvals, event.approver];
-    let next = audit({
-      ...state,
-      requests: state.requests.map((item) => item.id === request.id ? { ...item, approvals } : item),
-    }, event.approver.name, "Exception approval recorded", `Approval ${approvals.length} of 2 for ${actionNames[request.kind].toLowerCase()}: ${request.reason}`);
-    if (approvals.length >= 2) {
-      const approvedRequest = { ...request, approvals };
-      next = applyApprovedAction(next, approvedRequest);
-      next = {
-        ...next,
-        requests: next.requests.map((item) => item.id === request.id ? { ...item, approvals, status: "approved" } : item),
-      };
-      next = audit(next, "FairEnrol demo", "Exception approved and applied",
-        `${actionNames[request.kind]} approved by ${approvals.map((member) => member.name).join(" and ")}. Public reason: ${request.reason}`);
-    }
-    return next;
-  }
-  if (event.type === "deny") {
-    const request = state.requests.find((item) => item.id === event.requestId);
-    if (!request || request.status !== "pending") return state;
-    return audit({
-      ...state,
-      requests: state.requests.map((item) => item.id === request.id ? { ...item, status: "denied" } : item),
-    }, event.actor, "Exception denied", `${event.reason} Request reason: ${request.reason}`);
-  }
-  return state;
-}
-
-function personName(state, id) {
-  return state.students.find((student) => student.id === id)?.name ?? id;
-}
 
 export default function App() {
   const { authenticated, isInitializing, isLoading, initError, login, logout, hasRealmRole, getValueFromToken } = useTideCloak();
@@ -138,6 +38,7 @@ export default function App() {
   const [panelCandidate, setPanelCandidate] = useState(demoRegistrar.id);
   const [panelRemoval, setPanelRemoval] = useState(initialPanel[2].id);
   const [notice, setNotice] = useState("");
+  const [batchNotice, setBatchNotice] = useState(null);
 
   useEffect(() => {
     if (location.pathname === "/auth/redirect" && !isInitializing) {
@@ -145,12 +46,84 @@ export default function App() {
     }
   }, [isInitializing]);
 
+  useEffect(() => {
+    if (authenticated) {
+      const realmAccess = getValueFromToken("realm_access");
+      const roles = realmAccess && Array.isArray(realmAccess.roles) ? realmAccess.roles : [];
+      const resourceAccess = getValueFromToken("resource_access");
+      const clientRoles = (resourceAccess && resourceAccess["fairenrol-app"] && Array.isArray(resourceAccess["fairenrol-app"].roles))
+        ? resourceAccess["fairenrol-app"].roles
+        : [];
+      const allRoles = [...roles, ...clientRoles];
+      const username = (getValueFromToken("preferred_username") || "").toLowerCase();
+      const email = (getValueFromToken("email") || "").toLowerCase();
+      const fullName = (getValueFromToken("name") || "").toLowerCase();
+      const givenName = (getValueFromToken("given_name") || "").toLowerCase();
+
+      const hasRole = (roleName) => (typeof hasRealmRole === "function" && hasRealmRole(roleName)) || allRoles.includes(roleName);
+
+      const isRegistrar =
+        hasRole("registrar") ||
+        hasRole("admin") ||
+        username.includes("registrar") ||
+        email.includes("registrar") ||
+        fullName.includes("registrar");
+
+      const isApprover =
+        hasRole("approver") ||
+        username.includes("approver") ||
+        email.includes("approver") ||
+        fullName.includes("approver");
+
+      if (isRegistrar) {
+        setRole("registrar");
+      } else if (isApprover) {
+        setRole("approver");
+        const matchedMember = state.panel.find(
+          (m) =>
+            m.name.toLowerCase().includes(username) ||
+            m.id.toLowerCase().includes(username) ||
+            username.includes(m.id.toLowerCase()) ||
+            (fullName && (m.name.toLowerCase().includes(fullName) || fullName.includes(m.name.toLowerCase()) || normalizePersonName(m.name) === normalizePersonName(fullName)))
+        );
+        if (matchedMember) {
+          setApproverId(matchedMember.id);
+        }
+      } else {
+        setRole("student");
+        const matched = state.students.find(
+          (s) =>
+            s.id.toLowerCase() === username ||
+            s.name.toLowerCase().includes(username) ||
+            username.includes(s.id.toLowerCase()) ||
+            (fullName && (s.name.toLowerCase().includes(fullName) || fullName.includes(s.name.toLowerCase()) || normalizePersonName(s.name) === normalizePersonName(fullName))) ||
+            (givenName && s.name.toLowerCase().includes(givenName))
+        );
+        if (matched) {
+          setStudentId(matched.id);
+        }
+      }
+    }
+  }, [authenticated]);
+
+  const authenticatedUser = useMemo(() => {
+    if (!authenticated) return null;
+    return {
+      id: getValueFromToken("sub") || getValueFromToken("preferred_username") || "tidecloak-user",
+      name: (getValueFromToken("name") || getValueFromToken("preferred_username") || "TideCloak User").trim(),
+      title: role === "registrar" ? "Registrar" : role === "approver" ? "Approver" : "Student",
+    };
+  }, [authenticated, role]);
+
   const activeApprover = state.panel.find((member) => member.id === approverId) ?? state.panel[0];
-  const actor = role === "registrar"
-    ? demoRegistrar
-    : role === "approver"
-      ? activeApprover
-      : state.students.find((student) => student.id === studentId);
+  const actor = authenticated && authenticatedUser
+    ? authenticatedUser
+    : role === "registrar"
+      ? demoRegistrar
+      : role === "approver"
+        ? activeApprover
+        : state.students.find((student) => student.id === studentId) ?? demoRegistrar;
+
   const isAlreadyEnrolled = (course, id) => course.enrolled.includes(id);
 
   const ownWaitlists = useMemo(() => state.courses
@@ -162,15 +135,25 @@ export default function App() {
     const base = {
       kind: requestKind,
       requester: actor.name,
+      requesterId: actor.id,
+      approverId: role === "approver" ? activeApprover?.id : undefined,
+      approverName: role === "approver" ? activeApprover?.name : undefined,
       reason: reason.trim(),
     };
     if (!base.reason) return;
     if (requestKind === "panel") {
+      const candidateStudent = state.students.find((student) => student.id === panelCandidate);
       const candidate = panelCandidate === demoRegistrar.id
         ? { id: demoRegistrar.id, name: demoRegistrar.name, title: demoRegistrar.title }
-        : state.students.find((student) => student.id === panelCandidate);
+        : candidateStudent
+          ? { id: candidateStudent.id, name: candidateStudent.name, title: candidateStudent.title || "Student Representative" }
+          : null;
       const replaceMember = state.panel.find((member) => member.id === panelRemoval);
       if (!candidate || !replaceMember) return;
+      if (candidate.id === replaceMember.id) {
+        setNotice("Cannot replace a panel member with themselves.");
+        return;
+      }
       dispatch({ type: "request", request: { ...base, candidate, replaceMember } });
     } else {
       dispatch({ type: "request", request: { ...base, courseId: selectedCourse, studentId: targetStudent } });
@@ -179,8 +162,9 @@ export default function App() {
   }
 
   function attemptRegistrarOverrides() {
-    dispatch({ type: "blocked", actor: demoRegistrar.name, reason: "Registrar cannot reorder a queue; positions change only through FIFO enrolment or a publicly reasoned, two-approval exception." });
-    dispatch({ type: "blocked", actor: demoRegistrar.name, reason: "Registrar cannot change the approver panel alone; a panel change needs two approver votes." });
+    const actorName = actor?.name || demoRegistrar.name;
+    dispatch({ type: "blocked", actor: actorName, reason: "Registrar cannot reorder a queue; positions change only through FIFO enrolment or a publicly reasoned, two-approval exception." });
+    dispatch({ type: "blocked", actor: actorName, reason: "Registrar cannot change the approver panel alone; a panel change needs two approver votes." });
     setNotice("Both override attempts were blocked. The public log records each attempt.");
   }
 
@@ -188,18 +172,6 @@ export default function App() {
     dispatch({ type: "enrol", courseId: course.id, studentId, studentName: personName(state, studentId), actor: actor.name });
     setNotice("Enrolment or FIFO waitlist position recorded in this demo.");
   }
-
-  useEffect(() => {
-    if (authenticated) {
-      if (hasRealmRole("registrar") || hasRealmRole("admin")) {
-        setRole("registrar");
-      } else if (hasRealmRole("approver")) {
-        setRole("approver");
-      } else {
-        setRole("student");
-      }
-    }
-  }, [authenticated]);
 
   async function startLogin() {
     try {
@@ -209,18 +181,103 @@ export default function App() {
     }
   }
 
+  function handleBatchFileChange(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = String(e.target?.result || "");
+        const parsedCourses = parseCoursesFile(text, file.name);
+        dispatch({
+          type: "batch_upload",
+          courses: parsedCourses,
+          fileName: file.name,
+          actor: actor.name,
+        });
+        setBatchNotice({
+          type: "success",
+          message: `Successfully processed "${file.name}": merged ${parsedCourses.length} course(s) into active catalog.`,
+        });
+      } catch (err) {
+        setBatchNotice({
+          type: "error",
+          message: `Failed to process file: ${err instanceof Error ? err.message : String(err)}`,
+        });
+      }
+    };
+    reader.onerror = () => {
+      setBatchNotice({
+        type: "error",
+        message: "Failed to read the selected file.",
+      });
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  }
+
+  function loadSampleBatch() {
+    const sampleCsv = `code,name,capacity
+COSC2801,Advanced Cloud Architectures,4
+COSC2802,Decentralized Governance & Cryptography,3
+COMP3100,Applied Artificial Intelligence,5`;
+    try {
+      const parsedCourses = parseCoursesFile(sampleCsv, "sample_courses.csv");
+      dispatch({
+        type: "batch_upload",
+        courses: parsedCourses,
+        fileName: "sample_courses.csv",
+        actor: actor.name,
+      });
+      setBatchNotice({
+        type: "success",
+        message: `Successfully loaded sample batch: merged 3 courses into catalog and recalculated FIFO waitlists.`,
+      });
+    } catch (err) {
+      setBatchNotice({
+        type: "error",
+        message: err.message,
+      });
+    }
+  }
+
   if (isInitializing) return <main className="loading">Connecting to TideCloak…</main>;
 
   const tokenName = authenticated
-    ? getValueFromToken("name") || getValueFromToken("preferred_username")
+    ? getValueFromToken("name") ||
+      (getValueFromToken("given_name")
+        ? `${getValueFromToken("given_name")} ${getValueFromToken("family_name") || ""}`.trim()
+        : null) ||
+      getValueFromToken("preferred_username") ||
+      "Admin User"
     : "";
-  const hasRegistrarRole = authenticated && (hasRealmRole("registrar") || hasRealmRole("admin"));
-  const hasApproverRole = authenticated && hasRealmRole("approver");
+
+  const userRoles = useMemo(() => {
+    if (!authenticated) return [];
+    const realmAccess = getValueFromToken("realm_access");
+    const roles = realmAccess && Array.isArray(realmAccess.roles) ? realmAccess.roles : [];
+    const resourceAccess = getValueFromToken("resource_access");
+    const clientRoles = (resourceAccess && resourceAccess["fairenrol-app"] && Array.isArray(resourceAccess["fairenrol-app"].roles))
+      ? resourceAccess["fairenrol-app"].roles
+      : [];
+    return [...roles, ...clientRoles];
+  }, [authenticated, getValueFromToken]);
+
+  const hasRegistrarRole = authenticated && (
+    (typeof hasRealmRole === "function" && (hasRealmRole("registrar") || hasRealmRole("admin"))) ||
+    userRoles.includes("registrar") ||
+    userRoles.includes("admin")
+  );
+  const hasApproverRole = authenticated && (
+    (typeof hasRealmRole === "function" && hasRealmRole("approver")) ||
+    userRoles.includes("approver")
+  );
 
   return (
     <main className="shell">
       <header className="topbar">
-        <a className="brand" href="#"><span className="brand-mark">F</span> FairEnrol <span className="group-badge">GDU_SGS_GOAT_C2</span></a>
+        <a className="brand" href="#"><span className="brand-mark">F</span> FairEnrol</a>
         <div className="top-actions">
           <span className={`auth-state ${authenticated ? "connected" : ""}`}>
             <i /> {authenticated ? `TideCloak · ${tokenName || "signed in"}` : "TideCloak · not signed in"}
@@ -249,9 +306,6 @@ export default function App() {
         <span>DEMO MODE</span>
         TideCloak login is real when configured. The role switcher and 2-of-3 exception flow below are local simulations, not Tide-enforced authorization.
       </div>
-      {initError && <div className="notice login-error" role="alert">
-        TideCloak Dev Instance Status: {initError.message}. High-fidelity interactive governance simulation mode active with live 2-of-3 quorum consensus and public audit logs! (To test live SSO, start local TideCloak container at localhost:8080).
-      </div>}
 
       <section className="toolbar">
         <div>
@@ -309,8 +363,69 @@ export default function App() {
       {role === "registrar" && (
         <section className="section">
           <div className="section-heading"><div><div className="eyebrow">REGISTRAR DASHBOARD</div><h2>Course administration</h2></div><span className="count-pill">Course limits only</span></div>
+
+          <div className="batch-upload-card">
+            <div className="batch-upload-header">
+              <div>
+                <span className="eyebrow">BATCH CATALOG MANAGEMENT</span>
+                <h3>Upload Courses & Class Capacities</h3>
+                <p>Import course lists via JSON or CSV file to update capacities and merge new offerings in real time.</p>
+              </div>
+              <div className="upload-controls">
+                <label className="button dark file-upload-btn" title="Upload courses from JSON or CSV file">
+                  <span>📁 Select JSON / CSV File</span>
+                  <input
+                    type="file"
+                    accept=".json,.csv,application/json,text/csv"
+                    onChange={handleBatchFileChange}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="button outline"
+                  onClick={loadSampleBatch}
+                  title="Load sample batch to test real-time catalog merge"
+                >
+                  Load Sample Batch
+                </button>
+              </div>
+            </div>
+            {batchNotice && (
+              <div className={`batch-status-msg ${batchNotice.type === "error" ? "error" : ""}`}>
+                <span>{batchNotice.message}</span>
+                <button
+                  type="button"
+                  aria-label="Dismiss batch message"
+                  className="batch-dismiss-btn"
+                  onClick={() => setBatchNotice(null)}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="registrar-grid">
-            {state.courses.map((course) => <article className="course-card" key={course.id}><span className="course-code">{course.code}</span><h3>{course.name}</h3><CapacityEditor course={course} actor={demoRegistrar.name} dispatch={dispatch} /><div className="course-stats"><span>Enrolled <b>{course.enrolled.length}</b></span><span>Waitlist <b>{course.waitlist.length}</b></span></div></article>)}
+            {state.courses.map((course) => {
+              const available = Math.max(0, course.capacity - course.enrolled.length);
+              return (
+                <article className="course-card" key={course.id}>
+                  <div className="course-top">
+                    <span className="course-code">{course.code}</span>
+                    <span className={available ? "seats open" : "seats full"}>
+                      {available ? `${available} seats open` : "At capacity"}
+                    </span>
+                  </div>
+                  <h3>{course.name}</h3>
+                  <CapacityEditor course={course} actor={actor.name} dispatch={dispatch} />
+                  <div className="course-stats">
+                    <span>Enrolled <b>{course.enrolled.length}/{course.capacity}</b></span>
+                    <span>Waitlist <b>{course.waitlist.length}</b></span>
+                  </div>
+                </article>
+              );
+            })}
           </div>
           <div className="blocked-card"><div><span className="blocked-icon">⛔</span><div><strong>Override attempt demo</strong><p>Try moving a friend to the front or adding yourself to the approver panel.</p></div></div><button className="button outline" onClick={attemptRegistrarOverrides}>Attempt both overrides</button></div>
           <RequestForm {...{ state, selectedCourse, setSelectedCourse, requestKind, setRequestKind, targetStudent, setTargetStudent, reason, setReason, panelCandidate, setPanelCandidate, panelRemoval, setPanelRemoval, submitRequest }} registrar />
@@ -328,10 +443,10 @@ export default function App() {
               <p className="request-reason">“{request.reason}”</p>
               <div className="vote-row"><span>{request.approvals.length} of 2 approvals</span><div className="vote-avatars">{request.approvals.map((member) => <span className="avatar mini" title={member.name} key={member.id}>{member.name.split(" ").map((part) => part[0]).slice(-2).join("")}</span>)}</div></div>
               {request.status === "pending" && <div className="request-actions">
-                {request.requester === activeApprover?.name
+                {isSelfRequest(request, activeApprover, actor)
                   ? <span className="muted">Requester cannot approve their own request</span>
-                  : <button className="button approve" onClick={() => dispatch({ type: "vote", requestId: request.id, approver: activeApprover })} disabled={request.approvals.some((member) => member.id === activeApprover?.id)}>Approve as {activeApprover?.name}</button>}
-                <button className="button text-button" onClick={() => dispatch({ type: "deny", requestId: request.id, actor: activeApprover?.name, reason: "The panel declined this request." })}>Deny</button>
+                  : <button className="button approve" onClick={() => dispatch({ type: "vote", requestId: request.id, approver: activeApprover, actorName: actor?.name, actorId: actor?.id })} disabled={request.approvals.some((member) => member.id === activeApprover?.id)}>Approve as {activeApprover?.name}</button>}
+                <button className="button text-button" onClick={() => dispatch({ type: "deny", requestId: request.id, actor: activeApprover?.name || actor?.name, reason: "The panel declined this request." })}>Deny</button>
               </div>}
             </article>)}
             {state.requests.length === 0 && <p className="empty">No open requests. Submit one above to begin the demo.</p>}
@@ -350,7 +465,7 @@ export default function App() {
       <section className="section audit-section">
         <div className="section-heading"><div><div className="eyebrow">TRANSPARENT BY DEFAULT</div><h2>Public audit log</h2></div><span className="count-pill">{state.audit.length} events</span></div>
         <div className="audit-list">
-          {state.audit.map((entry) => <div className="audit-row" key={entry.id}><time>{new Date(entry.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time><span className="audit-dot" /><div><strong>{entry.action}</strong><p>{entry.reason}</p></div><span className="audit-actor">{entry.actor}</span></div>)}
+          {state.audit.map((entry) => <div className="audit-row" key={entry.id}><time>{new Date(entry.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</time><span className="audit-dot" /><div><strong>{entry.action}</strong><p>{entry.reason}</p></div><span className="audit-actor">{entry.actor}</span></div>)}
           {state.audit.length === 0 && <p className="empty">Actions, approvals, denials and blocked attempts will appear here.</p>}
         </div>
       </section>
@@ -388,13 +503,54 @@ function CapacityEditor({ course, actor, dispatch }) {
   useEffect(() => setCapacity(String(course.capacity)), [course.capacity]);
 
   function save(event) {
-    event.preventDefault();
-    dispatch({ type: "capacity", courseId: course.id, capacity, actor });
+    if (event) event.preventDefault();
+    const val = Math.max(1, parseInt(capacity, 10) || 1);
+    setCapacity(String(val));
+    if (val !== course.capacity) {
+      dispatch({ type: "capacity", courseId: course.id, capacity: val, actor });
+    }
   }
 
-  return <form className="capacity-label" onSubmit={save}>
-    <label htmlFor={`capacity-${course.id}`}>Seat limit</label>
-    <input id={`capacity-${course.id}`} type="number" min="1" value={capacity} onChange={(event) => setCapacity(event.target.value)} />
-    <button className="button quiet" type="submit">Save</button>
-  </form>;
+  function adjustBy(delta) {
+    const currentVal = parseInt(capacity, 10) || course.capacity;
+    const nextVal = Math.max(1, currentVal + delta);
+    setCapacity(String(nextVal));
+    if (nextVal !== course.capacity) {
+      dispatch({ type: "capacity", courseId: course.id, capacity: nextVal, actor });
+    }
+  }
+
+  return (
+    <form className="capacity-label" onSubmit={save}>
+      <label htmlFor={`capacity-${course.id}`}>Seat limit</label>
+      <div className="capacity-input-group">
+        <button
+          type="button"
+          className="stepper-btn"
+          onClick={() => adjustBy(-1)}
+          disabled={course.capacity <= 1 || (parseInt(capacity, 10) || course.capacity) <= 1}
+          aria-label="Decrease seat limit"
+        >
+          −
+        </button>
+        <input
+          id={`capacity-${course.id}`}
+          type="number"
+          min="1"
+          value={capacity}
+          onChange={(event) => setCapacity(event.target.value)}
+          onBlur={save}
+        />
+        <button
+          type="button"
+          className="stepper-btn"
+          onClick={() => adjustBy(1)}
+          aria-label="Increase seat limit"
+        >
+          +
+        </button>
+        <button className="button quiet" type="submit">Save</button>
+      </div>
+    </form>
+  );
 }

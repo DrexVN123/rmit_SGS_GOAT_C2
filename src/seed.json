@@ -1,15 +1,25 @@
 {
   "students": [
-    { "id": "s01", "name": "Avery Chen", "major": "Computer Science" },
-    { "id": "s02", "name": "Jordan Patel", "major": "Cybersecurity" },
-    { "id": "s03", "name": "Morgan Lee", "major": "Software Engineering" },
-    { "id": "s04", "name": "Riley Nguyen", "major": "Information Technology" },
-    { "id": "s05", "name": "Casey Taylor", "major": "Artificial Intelligence" },
-    { "id": "s06", "name": "Quinn Wilson", "major": "Data Science" },
-    { "id": "s07", "name": "Skyler Brown", "major": "Cloud Computing" },
-    { "id": "s08", "name": "Drew Martin", "major": "Computer Science" },
-    { "id": "s09", "name": "Emerson Davis", "major": "Cybersecurity" },
-    { "id": "s10", "name": "Rowan Garcia", "major": "Information Technology" }
+    { "id": "s01", "name": "Avery Chen" },
+    { "id": "s02", "name": "Jordan Patel" },
+    { "id": "s03", "name": "Morgan Lee" },
+    { "id": "s04", "name": "Riley Nguyen" },
+    { "id": "s05", "name": "Casey Taylor" },
+    { "id": "s06", "name": "Quinn Wilson" },
+    { "id": "s07", "name": "Skyler Brown" },
+    { "id": "s08", "name": "Drew Martin" },
+    { "id": "s09", "name": "Emerson Davis" },
+    { "id": "s10", "name": "Rowan Garcia" },
+    { "id": "s11", "name": "Finley Kim" },
+    { "id": "s12", "name": "Harper Singh" },
+    { "id": "s13", "name": "Reese Moore" },
+    { "id": "s14", "name": "Parker Wilson" },
+    { "id": "s15", "name": "Sage Thompson" },
+    { "id": "s16", "name": "Alex Rivera" },
+    { "id": "s17", "name": "Charlie Brooks" },
+    { "id": "s18", "name": "Dakota Evans" },
+    { "id": "s19", "name": "Jamie Cooper" },
+    { "id": "s20", "name": "Robin Shah" }
   ],
   "courses": [
     {
@@ -21,28 +31,20 @@
       "waitlist": ["s04", "s05", "s06"]
     },
     {
-      "id": "cosc2670",
-      "code": "COSC2670",
-      "name": "Principles of Cloud & Cybersecurity",
-      "capacity": 3,
-      "enrolled": ["s07", "s08"],
-      "waitlist": ["s09", "s10"]
-    },
-    {
       "id": "isys3414",
       "code": "ISYS3414",
-      "name": "Decentralized Database Systems",
+      "name": "Database Systems",
       "capacity": 4,
-      "enrolled": ["s01", "s04", "s07"],
-      "waitlist": ["s02", "s05"]
+      "enrolled": ["s07", "s08", "s09"],
+      "waitlist": ["s10", "s11"]
     },
     {
       "id": "cosc2408",
       "code": "COSC2408",
-      "name": "Full-Stack Web Programming",
+      "name": "Web Programming",
       "capacity": 3,
-      "enrolled": ["s03", "s08"],
-      "waitlist": ["s06", "s10"]
+      "enrolled": ["s12", "s13"],
+      "waitlist": ["s14", "s15", "s16"]
     }
   ]
 }
