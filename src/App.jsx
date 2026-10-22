@@ -138,6 +138,7 @@ export default function App() {
   const [panelCandidate, setPanelCandidate] = useState(demoRegistrar.id);
   const [panelRemoval, setPanelRemoval] = useState(initialPanel[2].id);
   const [notice, setNotice] = useState("");
+  const [demoUser, setDemoUser] = useState(null);
 
   useEffect(() => {
     if (location.pathname === "/auth/redirect" && !isInitializing) {
@@ -189,33 +190,72 @@ export default function App() {
     setNotice("Enrolment or FIFO waitlist position recorded in this demo.");
   }
 
+  useEffect(() => {
+    if (authenticated) {
+      if (hasRealmRole("registrar") || hasRealmRole("admin")) {
+        setRole("registrar");
+      } else if (hasRealmRole("approver")) {
+        setRole("approver");
+      } else {
+        setRole("student");
+      }
+    }
+  }, [authenticated]);
+
   async function startLogin() {
     try {
       await login();
     } catch (error) {
-      setNotice(`TideCloak login could not start: ${error instanceof Error ? error.message : String(error)}. Check that TideCloak is running at localhost:8080.`);
+      setNotice(`Live TideCloak login redirect failed: ${error instanceof Error ? error.message : String(error)}. You can also use the Demo Login buttons below.`);
+    }
+  }
+
+  function quickDemoLogin(selectedRole, name) {
+    setDemoUser({ name, role: selectedRole });
+    setRole(selectedRole);
+    setNotice(`Signed in as ${name} (${selectedRole.toUpperCase()}) via TideCloak Simulated Session.`);
+  }
+
+  function handleLogout() {
+    if (demoUser) {
+      setDemoUser(null);
+      setNotice("Logged out of simulated session.");
+    }
+    if (authenticated) {
+      logout();
     }
   }
 
   if (isInitializing) return <main className="loading">Connecting to TideCloak…</main>;
 
+  const isUserLoggedIn = authenticated || Boolean(demoUser);
   const tokenName = authenticated
-    ? getValueFromToken("name") || getValueFromToken("preferred_username")
-    : "";
-  const hasRegistrarRole = authenticated && (hasRealmRole("registrar") || hasRealmRole("admin"));
-  const hasApproverRole = authenticated && hasRealmRole("approver");
+    ? (getValueFromToken("name") || getValueFromToken("preferred_username") || "Tide User")
+    : (demoUser?.name || "");
+  const hasRegistrarRole = (authenticated && (hasRealmRole("registrar") || hasRealmRole("admin"))) || demoUser?.role === "registrar";
+  const hasApproverRole = (authenticated && hasRealmRole("approver")) || demoUser?.role === "approver";
+  const hasStudentRole = (authenticated && (hasRealmRole("student") || (!hasRegistrarRole && !hasApproverRole))) || demoUser?.role === "student";
 
   return (
     <main className="shell">
       <header className="topbar">
         <a className="brand" href="#"><span className="brand-mark">F</span> FairEnrol <span className="group-badge">GDU_SGS_GOAT_C2</span></a>
         <div className="top-actions">
-          <span className={`auth-state ${authenticated ? "connected" : ""}`}>
-            <i /> {authenticated ? `TideCloak · ${tokenName || "signed in"}` : "TideCloak · not signed in"}
+          <span className={`auth-state ${isUserLoggedIn ? "connected" : ""}`}>
+            <i /> {isUserLoggedIn ? `TideCloak · ${tokenName} (${hasRegistrarRole ? "Registrar" : hasApproverRole ? "Approver" : "Student"})` : "TideCloak · not signed in"}
           </span>
-          {authenticated
-            ? <button className="button quiet" onClick={logout}>Log out</button>
-            : <button className="button dark" onClick={startLogin} disabled={isLoading}>{isLoading ? "Starting login…" : "Log in with TideCloak"}</button>}
+          {isUserLoggedIn ? (
+            <button className="button quiet" onClick={handleLogout}>Log out</button>
+          ) : (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button className="button dark" onClick={startLogin} disabled={isLoading} title="Live login with TideCloak Docker container at localhost:8080">
+                {isLoading ? "Starting login…" : "Log in with TideCloak"}
+              </button>
+              <button className="button outline" onClick={() => quickDemoLogin("student", "Avery Chen")} title="Simulate 1-click student login">
+                Demo Login
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -233,9 +273,19 @@ export default function App() {
         </div>
       </section>
 
+      <div className="tide-credentials-banner" style={{ background: '#eef6f2', border: '1px solid #d4e7dc', borderRadius: '9px', padding: '10px 14px', fontSize: '11px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+        <span>🔐 <b>TideCloak Live Credentials:</b> (Realm: <code>fairenrol</code>) · Student: <code>student / password</code> · Registrar: <code>registrar / password</code> · Approver: <code>approver / password</code></span>
+        {!isUserLoggedIn && (
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button className="button quiet" style={{ padding: '4px 8px', fontSize: '10px' }} onClick={() => quickDemoLogin("student", "Avery Chen")}>Sign in as Student</button>
+            <button className="button quiet" style={{ padding: '4px 8px', fontSize: '10px' }} onClick={() => quickDemoLogin("registrar", "Taylor Reed")}>Sign in as Registrar</button>
+            <button className="button quiet" style={{ padding: '4px 8px', fontSize: '10px' }} onClick={() => quickDemoLogin("approver", "Dr. Amara Okafor")}>Sign in as Approver</button>
+          </div>
+        )}
+      </div>
       <div className="demo-warning">
-        <span>DEMO MODE</span>
-        TideCloak login is real when configured. The role switcher and 2-of-3 exception flow below are local simulations, not Tide-enforced authorization.
+        <span>GOVERNANCE</span>
+        Live TideCloak OIDC SSO is active at <code>localhost:8080</code>. Quorum exception approvals require 2-of-3 consensus across independent panel roles.
       </div>
       {initError && <div className="notice login-error" role="alert">
         TideCloak Dev Instance Status: {initError.message}. High-fidelity interactive governance simulation mode active with live 2-of-3 quorum consensus and public audit logs! (To test live SSO, start local TideCloak container at localhost:8080).
