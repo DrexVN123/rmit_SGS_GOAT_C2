@@ -242,8 +242,6 @@ COMP3100,Applied Artificial Intelligence,5`;
     }
   }
 
-  if (isInitializing) return <main className="loading">Connecting to TideCloak…</main>;
-
   const tokenName = authenticated
     ? getValueFromToken("name") ||
       (getValueFromToken("given_name")
@@ -280,11 +278,11 @@ COMP3100,Applied Artificial Intelligence,5`;
         <a className="brand" href="#"><span className="brand-mark">F</span> FairEnrol</a>
         <div className="top-actions">
           <span className={`auth-state ${authenticated ? "connected" : ""}`}>
-            <i /> {authenticated ? `TideCloak · ${tokenName || "signed in"}` : "TideCloak · not signed in"}
+            <i /> {isInitializing ? "TideCloak · connecting..." : authenticated ? `TideCloak · ${tokenName || "signed in"}` : "TideCloak · not signed in"}
           </span>
           {authenticated
             ? <button className="button quiet" onClick={logout}>Log out</button>
-            : <button className="button dark" onClick={startLogin} disabled={isLoading}>{isLoading ? "Starting login…" : "Log in with TideCloak"}</button>}
+            : <button className="button dark" onClick={startLogin} disabled={isLoading || isInitializing}>{isLoading ? "Starting login…" : isInitializing ? "Connecting…" : "Log in with TideCloak"}</button>}
         </div>
       </header>
 
