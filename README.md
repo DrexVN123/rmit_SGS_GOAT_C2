@@ -118,11 +118,25 @@ docker run -d \
 ```bash
 npm run dev
 ```
-Open [http://localhost:5173/](http://localhost:5173/) to interact with the working app!
+Open [http://localhost:5137/](http://localhost:5137/) to interact with the working app!
 
-*(Note: If the local Docker TideCloak instance is not running, FairEnrol automatically enters high-fidelity interactive demo mode with full simulation of roles, quorum voting, and audit trails).*
+### 5. Authentication & Pre-configured Accounts
 
-### 5. Run Automated Test Suite
+TideCloak OIDC authentication is fully integrated with realm `fairenrol`:
+
+| Username | Password | Role | Permissions & Journey |
+| :--- | :--- | :--- | :--- |
+| **`admin`** | `password` | `admin`, `registrar` | **System Administrator**: Full course capacity adjustment, JSON/CSV batch catalog upload, real-time recalculations. |
+| **`registrar`** | `password` | `registrar` | **Registrar**: Course administration, batch upload, exception requests, privilege escalation demonstration. |
+| **`approver`** | `password` | `approver` | **Quorum Panel Approver**: Casts votes to reach 2-of-3 threshold consensus on student exception requests. |
+| **`student`** | `password` | `student` | **Student**: View courses, join waitlists in FIFO order, track position. |
+
+#### Self-Service Registration (Tạo tài khoản mới)
+- **Direct on Login Screen:** Click **"Log in with TideCloak"**, then click **"New user? Register"** on the TideCloak portal.
+- **Automatic Role Assignment:** All newly registered users are automatically granted the `student` role and can immediately log into FairEnrol.
+- **Keycloak Admin Console:** Accessible at `http://localhost:8080/admin/master/console/` (User: `admin` / Password: `password`) for complete IAM governance and manual user provisioning.
+
+### 6. Run Automated Test Suite
 ```bash
 npm test
 ```

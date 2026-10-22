@@ -1,673 +1,761 @@
-{
-  "id": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9",
-  "realm": "fairenrol",
-  "displayName": "FairEnrol University Portal",
-  "notBefore": 0,
-  "defaultSignatureAlgorithm": "RS256",
-  "revokeRefreshToken": false,
-  "refreshTokenMaxReuse": 0,
-  "accessTokenLifespan": 300,
-  "accessTokenLifespanForImplicitFlow": 900,
-  "ssoSessionIdleTimeout": 1800,
-  "ssoSessionMaxLifespan": 36000,
-  "ssoSessionIdleTimeoutRememberMe": 0,
-  "ssoSessionMaxLifespanRememberMe": 0,
-  "offlineSessionIdleTimeout": 2592000,
-  "offlineSessionMaxLifespanEnabled": false,
-  "offlineSessionMaxLifespan": 5184000,
-  "clientSessionIdleTimeout": 0,
-  "clientSessionMaxLifespan": 0,
-  "clientOfflineSessionIdleTimeout": 0,
-  "clientOfflineSessionMaxLifespan": 0,
-  "accessCodeLifespan": 60,
-  "accessCodeLifespanUserAction": 300,
-  "accessCodeLifespanLogin": 1800,
-  "actionTokenGeneratedByAdminLifespan": 43200,
-  "actionTokenGeneratedByUserLifespan": 300,
-  "oauth2DeviceCodeLifespan": 600,
-  "oauth2DevicePollingInterval": 5,
-  "enabled": true,
-  "sslRequired": "external",
-  "registrationAllowed": false,
-  "registrationEmailAsUsername": false,
-  "rememberMe": false,
-  "verifyEmail": false,
-  "loginWithEmailAllowed": true,
-  "duplicateEmailsAllowed": false,
-  "resetPasswordAllowed": false,
-  "editUsernameAllowed": false,
-  "bruteForceProtected": false,
-  "permanentLockout": false,
-  "maxTemporaryLockouts": 0,
-  "bruteForceStrategy": "MULTIPLE",
-  "maxFailureWaitSeconds": 900,
-  "minimumQuickLoginWaitSeconds": 60,
-  "waitIncrementSeconds": 60,
-  "quickLoginCheckMilliSeconds": 1000,
-  "maxDeltaTimeSeconds": 43200,
-  "failureFactor": 30,
-  "maxSecondaryAuthFailures": 0,
-  "defaultRole": {
-    "id": "56fb0658-3c69-4ac9-a960-7a6075c68e47",
-    "name": "default-roles-fairenrol",
-    "description": "${role_default-roles}",
-    "composite": true,
-    "clientRole": false,
-    "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-  },
-  "requiredCredentials": [
-    "password"
-  ],
-  "otpPolicyType": "totp",
-  "otpPolicyAlgorithm": "HmacSHA1",
-  "otpPolicyInitialCounter": 0,
-  "otpPolicyDigits": 6,
-  "otpPolicyLookAheadWindow": 1,
-  "otpPolicyPeriod": 30,
-  "otpPolicyCodeReusable": false,
-  "otpSupportedApplications": [
-    "totpAppFreeOTPName",
-    "totpAppGoogleName",
-    "totpAppMicrosoftAuthenticatorName"
-  ],
-  "webAuthnPolicyRpEntityName": "keycloak",
-  "webAuthnPolicySignatureAlgorithms": [
-    "ES256",
-    "RS256"
-  ],
-  "webAuthnPolicyRpId": "",
-  "webAuthnPolicyAttestationConveyancePreference": "not specified",
-  "webAuthnPolicyAuthenticatorAttachment": "not specified",
-  "webAuthnPolicyRequireResidentKey": "not specified",
-  "webAuthnPolicyResidentKey": "not specified",
-  "webAuthnPolicyUserVerificationRequirement": "not specified",
-  "webAuthnPolicyCreateTimeout": 0,
-  "webAuthnPolicyAvoidSameAuthenticatorRegister": false,
-  "webAuthnPolicyAcceptableAaguids": [],
-  "webAuthnPolicyExtraOrigins": [],
-  "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
-  "webAuthnPolicyPasswordlessSignatureAlgorithms": [
-    "ES256",
-    "RS256"
-  ],
-  "webAuthnPolicyPasswordlessRpId": "",
-  "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
-  "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
-  "webAuthnPolicyPasswordlessRequireResidentKey": "not specified",
-  "webAuthnPolicyPasswordlessResidentKey": "required",
-  "webAuthnPolicyPasswordlessUserVerificationRequirement": "required",
-  "webAuthnPolicyPasswordlessCreateTimeout": 0,
-  "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
-  "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-  "webAuthnPolicyPasswordlessExtraOrigins": [],
-  "browserSecurityHeaders": {
-    "contentSecurityPolicyReportOnly": "",
-    "xContentTypeOptions": "nosniff",
-    "referrerPolicy": "no-referrer",
-    "xRobotsTag": "none",
-    "xFrameOptions": "SAMEORIGIN",
-    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
-    "strictTransportSecurity": "max-age=31536000; includeSubDomains"
-  },
-  "smtpServer": {},
-  "eventsEnabled": false,
-  "eventsListeners": [
-    "jboss-logging"
-  ],
-  "enabledEventTypes": [],
-  "adminEventsEnabled": false,
-  "adminEventsDetailsEnabled": false,
-  "internationalizationEnabled": false,
-  "browserFlow": "browser",
-  "registrationFlow": "registration",
-  "directGrantFlow": "direct grant",
-  "resetCredentialsFlow": "reset credentials",
-  "clientAuthenticationFlow": "clients",
-  "dockerAuthenticationFlow": "docker auth",
-  "firstBrokerLoginFlow": "first broker login",
-  "attributes": {
-    "cibaBackchannelTokenDeliveryMode": "poll",
-    "cibaExpiresIn": "120",
-    "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DeviceCodeLifespan": "600",
-    "oauth2DevicePollingInterval": "5",
-    "parRequestUriLifespan": "60",
-    "cibaInterval": "5",
-    "realmReusableOtpCode": "false"
-  },
-  "userManagedAccessAllowed": false,
-  "organizationsEnabled": false,
-  "verifiableCredentialsEnabled": false,
-  "adminPermissionsEnabled": false,
-  "scimApiEnabled": false,
-  "clientProfiles": {
-    "profiles": []
-  },
-  "clientPolicies": {
-    "policies": []
-  },
-  "clients": [
-    {
-      "id": "ccb759af-d946-430f-bcfd-2cddedb24182",
-      "clientId": "account",
-      "name": "${client_account}",
-      "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/fairenrol/account/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/fairenrol/account/*"
-      ],
-      "webOrigins": [],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "post.logout.redirect.uris": "+"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
-      "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": true,
-        "manage": true
-      }
-    },
-    {
-      "id": "d769a523-3535-41cf-9a43-61138318df59",
-      "clientId": "account-console",
-      "name": "${client_account-console}",
-      "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/fairenrol/account/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/fairenrol/account/*"
-      ],
-      "webOrigins": [],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "post.logout.redirect.uris": "+",
-        "pkce.code.challenge.method": "S256"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
-      "nodeReRegistrationTimeout": 0,
-      "protocolMappers": [
-        {
-          "id": "0375bfcd-3553-4eb8-a9a1-128cdb4e0d36",
-          "name": "audience resolve",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-resolve-mapper",
-          "consentRequired": false,
-          "config": {}
-        }
-      ],
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": true,
-        "manage": true
-      }
-    },
-    {
-      "id": "db818e70-30e6-4795-96e5-ed072300f89d",
-      "clientId": "admin-cli",
-      "name": "${client_admin-cli}",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [],
-      "webOrigins": [],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": false,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "client.use.lightweight.access.token.enabled": "true"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": true,
-        "manage": true
-      }
-    },
-    {
-      "id": "298bdf37-e191-42d1-bd28-2d1d83916958",
-      "clientId": "broker",
-      "name": "${client_broker}",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [],
-      "webOrigins": [],
-      "notBefore": 0,
-      "bearerOnly": true,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": false,
-      "publicClient": false,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "true"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
-      "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": true,
-        "manage": true
-      }
-    },
-    {
-      "id": "d47e9e18-ae62-4edf-b60f-71572e66678d",
-      "clientId": "fairenrol-app",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "http://localhost:5173/silent-check-sso.html",
-        "http://localhost:5137/",
-        "http://localhost:5137/*",
-        "http://localhost:5137/silent-check-sso.html",
-        "http://localhost:5173/*",
-        "http://localhost:5173/"
-      ],
-      "webOrigins": [
-        "http://localhost:5137",
-        "*",
-        "+",
-        "http://localhost:5173"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "post.logout.redirect.uris": "+"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": true,
-        "manage": true
-      }
-    },
-    {
-      "id": "451b5f9f-4e77-4b90-b099-6d0a60ac2646",
-      "clientId": "realm-management",
-      "name": "${client_realm-management}",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [],
-      "webOrigins": [],
-      "notBefore": 0,
-      "bearerOnly": true,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": false,
-      "publicClient": false,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "true"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
-      "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": false,
-        "manage": false
-      }
-    },
-    {
-      "id": "c27da4c4-e803-4423-9527-26ddd6cee207",
-      "clientId": "security-admin-console",
-      "name": "${client_security-admin-console}",
-      "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/fairenrol/console/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/admin/fairenrol/console/*"
-      ],
-      "webOrigins": [
-        "+"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "client.use.lightweight.access.token.enabled": "true",
-        "post.logout.redirect.uris": "+",
-        "pkce.code.challenge.method": "S256"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": 0,
-      "protocolMappers": [
-        {
-          "id": "e34b10f5-9892-4f2a-98b5-5a83125bfad6",
-          "name": "locale",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "consentRequired": false,
-          "config": {
-            "introspection.token.claim": "true",
-            "userinfo.token.claim": "true",
-            "user.attribute": "locale",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "locale",
-            "jsonType.label": "String"
-          }
-        }
-      ],
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "organization",
-        "microprofile-jwt"
-      ],
-      "access": {
-        "view": true,
-        "configure": true,
-        "manage": true
-      }
-    }
-  ],
-  "roles": {
-    "realm": [
-      {
-        "id": "56fb0658-3c69-4ac9-a960-7a6075c68e47",
-        "name": "default-roles-fairenrol",
-        "description": "${role_default-roles}",
-        "composite": true,
-        "clientRole": false,
-        "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-      },
-      {
-        "id": "f8e8c26a-3fb4-4093-b247-f759fcb39989",
-        "name": "registrar",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-      },
-      {
-        "id": "b0a247da-2cb7-4ecc-a0e8-b0314afd52df",
-        "name": "offline_access",
-        "description": "${role_offline-access}",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-      },
-      {
-        "id": "c16e4340-0468-43a0-85f0-133652cd0470",
-        "name": "student",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-      },
-      {
-        "id": "c43a8b30-c6e6-4576-a24b-9d296ef1cd47",
-        "name": "approver",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-      },
-      {
-        "id": "dfe43d90-f9be-4390-87fc-42e7324ba91a",
-        "name": "uma_authorization",
-        "description": "${role_uma_authorization}",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
-      }
-    ]
-  },
-  "users": [
-    {
-      "id": "37f462bf-56a5-4c3f-8a02-199db13c54ca",
-      "username": "approver",
-      "firstName": "Amara",
-      "lastName": "Okafor",
-      "email": "approver@rmit.edu.vn",
-      "emailVerified": false,
-      "enabled": true,
-      "createdTimestamp": 1792649403595,
-      "totp": false,
-      "credentials": [
-        {
-          "type": "password",
-          "value": "password",
-          "temporary": false
-        }
-      ],
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "notBefore": 0,
-      "access": {
-        "manage": true
-      },
-      "realmRoles": [
-        "approver"
-      ]
-    },
-    {
-      "id": "702c3568-25b4-4fdf-ac0f-a95f85f94300",
-      "username": "registrar",
-      "firstName": "Taylor",
-      "lastName": "Reed",
-      "email": "registrar@rmit.edu.vn",
-      "emailVerified": false,
-      "enabled": true,
-      "createdTimestamp": 1792649403443,
-      "totp": false,
-      "credentials": [
-        {
-          "type": "password",
-          "value": "password",
-          "temporary": false
-        }
-      ],
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "notBefore": 0,
-      "access": {
-        "manage": true
-      },
-      "realmRoles": [
-        "registrar"
-      ]
-    },
-    {
-      "id": "fb9e802d-bec0-492e-aa3e-1a752a38261e",
-      "username": "student",
-      "firstName": "Avery",
-      "lastName": "Chen",
-      "email": "student@rmit.edu.vn",
-      "emailVerified": false,
-      "enabled": true,
-      "createdTimestamp": 1792649403079,
-      "totp": false,
-      "credentials": [
-        {
-          "type": "password",
-          "value": "password",
-          "temporary": false
-        }
-      ],
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "notBefore": 0,
-      "access": {
-        "manage": true
-      },
-      "realmRoles": [
-        "student"
-      ]
-    }
-  ]
+﻿{
+    "id":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9",
+    "realm":  "fairenrol",
+    "displayName":  "FairEnrol University Portal",
+    "notBefore":  0,
+    "defaultSignatureAlgorithm":  "RS256",
+    "revokeRefreshToken":  false,
+    "refreshTokenMaxReuse":  0,
+    "accessTokenLifespan":  300,
+    "accessTokenLifespanForImplicitFlow":  900,
+    "ssoSessionIdleTimeout":  1800,
+    "ssoSessionMaxLifespan":  36000,
+    "ssoSessionIdleTimeoutRememberMe":  0,
+    "ssoSessionMaxLifespanRememberMe":  0,
+    "offlineSessionIdleTimeout":  2592000,
+    "offlineSessionMaxLifespanEnabled":  false,
+    "offlineSessionMaxLifespan":  5184000,
+    "clientSessionIdleTimeout":  0,
+    "clientSessionMaxLifespan":  0,
+    "clientOfflineSessionIdleTimeout":  0,
+    "clientOfflineSessionMaxLifespan":  0,
+    "accessCodeLifespan":  60,
+    "accessCodeLifespanUserAction":  300,
+    "accessCodeLifespanLogin":  1800,
+    "actionTokenGeneratedByAdminLifespan":  43200,
+    "actionTokenGeneratedByUserLifespan":  300,
+    "oauth2DeviceCodeLifespan":  600,
+    "oauth2DevicePollingInterval":  5,
+    "enabled":  true,
+    "sslRequired":  "external",
+    "registrationAllowed":  true,
+    "registrationEmailAsUsername":  false,
+    "rememberMe":  true,
+    "verifyEmail":  false,
+    "loginWithEmailAllowed":  true,
+    "duplicateEmailsAllowed":  false,
+    "resetPasswordAllowed":  true,
+    "editUsernameAllowed":  false,
+    "bruteForceProtected":  false,
+    "permanentLockout":  false,
+    "maxTemporaryLockouts":  0,
+    "bruteForceStrategy":  "MULTIPLE",
+    "maxFailureWaitSeconds":  900,
+    "minimumQuickLoginWaitSeconds":  60,
+    "waitIncrementSeconds":  60,
+    "quickLoginCheckMilliSeconds":  1000,
+    "maxDeltaTimeSeconds":  43200,
+    "failureFactor":  30,
+    "maxSecondaryAuthFailures":  0,
+    "defaultRole":  {
+                        "id":  "56fb0658-3c69-4ac9-a960-7a6075c68e47",
+                        "name":  "default-roles-fairenrol",
+                        "description":  "${role_default-roles}",
+                        "composite":  true,
+                        "clientRole":  false,
+                        "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                    },
+    "requiredCredentials":  [
+                                "password"
+                            ],
+    "otpPolicyType":  "totp",
+    "otpPolicyAlgorithm":  "HmacSHA1",
+    "otpPolicyInitialCounter":  0,
+    "otpPolicyDigits":  6,
+    "otpPolicyLookAheadWindow":  1,
+    "otpPolicyPeriod":  30,
+    "otpPolicyCodeReusable":  false,
+    "otpSupportedApplications":  [
+                                     "totpAppFreeOTPName",
+                                     "totpAppGoogleName",
+                                     "totpAppMicrosoftAuthenticatorName"
+                                 ],
+    "webAuthnPolicyRpEntityName":  "keycloak",
+    "webAuthnPolicySignatureAlgorithms":  [
+                                              "ES256",
+                                              "RS256"
+                                          ],
+    "webAuthnPolicyRpId":  "",
+    "webAuthnPolicyAttestationConveyancePreference":  "not specified",
+    "webAuthnPolicyAuthenticatorAttachment":  "not specified",
+    "webAuthnPolicyRequireResidentKey":  "not specified",
+    "webAuthnPolicyResidentKey":  "not specified",
+    "webAuthnPolicyUserVerificationRequirement":  "not specified",
+    "webAuthnPolicyCreateTimeout":  0,
+    "webAuthnPolicyAvoidSameAuthenticatorRegister":  false,
+    "webAuthnPolicyAcceptableAaguids":  [
+
+                                        ],
+    "webAuthnPolicyExtraOrigins":  [
+
+                                   ],
+    "webAuthnPolicyPasswordlessRpEntityName":  "keycloak",
+    "webAuthnPolicyPasswordlessSignatureAlgorithms":  [
+                                                          "ES256",
+                                                          "RS256"
+                                                      ],
+    "webAuthnPolicyPasswordlessRpId":  "",
+    "webAuthnPolicyPasswordlessAttestationConveyancePreference":  "not specified",
+    "webAuthnPolicyPasswordlessAuthenticatorAttachment":  "not specified",
+    "webAuthnPolicyPasswordlessRequireResidentKey":  "not specified",
+    "webAuthnPolicyPasswordlessResidentKey":  "required",
+    "webAuthnPolicyPasswordlessUserVerificationRequirement":  "required",
+    "webAuthnPolicyPasswordlessCreateTimeout":  0,
+    "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister":  false,
+    "webAuthnPolicyPasswordlessAcceptableAaguids":  [
+
+                                                    ],
+    "webAuthnPolicyPasswordlessExtraOrigins":  [
+
+                                               ],
+    "browserSecurityHeaders":  {
+                                   "contentSecurityPolicyReportOnly":  "",
+                                   "xContentTypeOptions":  "nosniff",
+                                   "referrerPolicy":  "no-referrer",
+                                   "xRobotsTag":  "none",
+                                   "xFrameOptions":  "SAMEORIGIN",
+                                   "contentSecurityPolicy":  "frame-src \u0027self\u0027; frame-ancestors \u0027self\u0027; object-src \u0027none\u0027;",
+                                   "strictTransportSecurity":  "max-age=31536000; includeSubDomains"
+                               },
+    "smtpServer":  {
+
+                   },
+    "eventsEnabled":  false,
+    "eventsListeners":  [
+                            "jboss-logging"
+                        ],
+    "enabledEventTypes":  [
+
+                          ],
+    "adminEventsEnabled":  false,
+    "adminEventsDetailsEnabled":  false,
+    "internationalizationEnabled":  false,
+    "browserFlow":  "browser",
+    "registrationFlow":  "registration",
+    "directGrantFlow":  "direct grant",
+    "resetCredentialsFlow":  "reset credentials",
+    "clientAuthenticationFlow":  "clients",
+    "dockerAuthenticationFlow":  "docker auth",
+    "firstBrokerLoginFlow":  "first broker login",
+    "attributes":  {
+                       "cibaBackchannelTokenDeliveryMode":  "poll",
+                       "cibaExpiresIn":  "120",
+                       "cibaAuthRequestedUserHint":  "login_hint",
+                       "oauth2DeviceCodeLifespan":  "600",
+                       "oauth2DevicePollingInterval":  "5",
+                       "parRequestUriLifespan":  "60",
+                       "cibaInterval":  "5",
+                       "realmReusableOtpCode":  "false"
+                   },
+    "userManagedAccessAllowed":  false,
+    "organizationsEnabled":  false,
+    "verifiableCredentialsEnabled":  false,
+    "adminPermissionsEnabled":  false,
+    "scimApiEnabled":  false,
+    "clientProfiles":  {
+                           "profiles":  [
+
+                                        ]
+                       },
+    "clientPolicies":  {
+                           "policies":  [
+
+                                        ]
+                       },
+    "clients":  [
+                    {
+                        "id":  "ccb759af-d946-430f-bcfd-2cddedb24182",
+                        "clientId":  "account",
+                        "name":  "${client_account}",
+                        "rootUrl":  "${authBaseUrl}",
+                        "baseUrl":  "/realms/fairenrol/account/",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+                                             "/realms/fairenrol/account/*"
+                                         ],
+                        "webOrigins":  [
+
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  false,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  true,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  false,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  true,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "false",
+                                           "post.logout.redirect.uris":  "+"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  false,
+                        "nodeReRegistrationTimeout":  0,
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  true,
+                                       "manage":  true
+                                   }
+                    },
+                    {
+                        "id":  "d769a523-3535-41cf-9a43-61138318df59",
+                        "clientId":  "account-console",
+                        "name":  "${client_account-console}",
+                        "rootUrl":  "${authBaseUrl}",
+                        "baseUrl":  "/realms/fairenrol/account/",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+                                             "/realms/fairenrol/account/*"
+                                         ],
+                        "webOrigins":  [
+
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  false,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  true,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  false,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  true,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "false",
+                                           "post.logout.redirect.uris":  "+",
+                                           "pkce.code.challenge.method":  "S256"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  false,
+                        "nodeReRegistrationTimeout":  0,
+                        "protocolMappers":  [
+                                                {
+                                                    "id":  "0375bfcd-3553-4eb8-a9a1-128cdb4e0d36",
+                                                    "name":  "audience resolve",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-audience-resolve-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+
+                                                               }
+                                                }
+                                            ],
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  true,
+                                       "manage":  true
+                                   }
+                    },
+                    {
+                        "id":  "db818e70-30e6-4795-96e5-ed072300f89d",
+                        "clientId":  "admin-cli",
+                        "name":  "${client_admin-cli}",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+
+                                         ],
+                        "webOrigins":  [
+
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  false,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  false,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  true,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  true,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "false",
+                                           "client.use.lightweight.access.token.enabled":  "true"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  true,
+                        "nodeReRegistrationTimeout":  0,
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  true,
+                                       "manage":  true
+                                   }
+                    },
+                    {
+                        "id":  "298bdf37-e191-42d1-bd28-2d1d83916958",
+                        "clientId":  "broker",
+                        "name":  "${client_broker}",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+
+                                         ],
+                        "webOrigins":  [
+
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  true,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  true,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  false,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  false,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "true"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  false,
+                        "nodeReRegistrationTimeout":  0,
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  true,
+                                       "manage":  true
+                                   }
+                    },
+                    {
+                        "id":  "d47e9e18-ae62-4edf-b60f-71572e66678d",
+                        "clientId":  "fairenrol-app",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+                                             "http://localhost:5173/silent-check-sso.html",
+                                             "http://localhost:5137/",
+                                             "http://localhost:5137/*",
+                                             "http://localhost:5137/silent-check-sso.html",
+                                             "http://localhost:5173/*",
+                                             "http://localhost:5173/"
+                                         ],
+                        "webOrigins":  [
+                                           "http://localhost:5137",
+                                           "*",
+                                           "+",
+                                           "http://localhost:5173"
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  false,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  true,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  true,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  true,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "false",
+                                           "post.logout.redirect.uris":  "+"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  true,
+                        "nodeReRegistrationTimeout":  -1,
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  true,
+                                       "manage":  true
+                                   }
+                    },
+                    {
+                        "id":  "451b5f9f-4e77-4b90-b099-6d0a60ac2646",
+                        "clientId":  "realm-management",
+                        "name":  "${client_realm-management}",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+
+                                         ],
+                        "webOrigins":  [
+
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  true,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  true,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  false,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  false,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "true"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  false,
+                        "nodeReRegistrationTimeout":  0,
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  false,
+                                       "manage":  false
+                                   }
+                    },
+                    {
+                        "id":  "c27da4c4-e803-4423-9527-26ddd6cee207",
+                        "clientId":  "security-admin-console",
+                        "name":  "${client_security-admin-console}",
+                        "rootUrl":  "${authAdminUrl}",
+                        "baseUrl":  "/admin/fairenrol/console/",
+                        "surrogateAuthRequired":  false,
+                        "enabled":  true,
+                        "alwaysDisplayInConsole":  false,
+                        "clientAuthenticatorType":  "client-secret",
+                        "redirectUris":  [
+                                             "/admin/fairenrol/console/*"
+                                         ],
+                        "webOrigins":  [
+                                           "+"
+                                       ],
+                        "notBefore":  0,
+                        "bearerOnly":  false,
+                        "consentRequired":  false,
+                        "standardFlowEnabled":  true,
+                        "implicitFlowEnabled":  false,
+                        "directAccessGrantsEnabled":  false,
+                        "serviceAccountsEnabled":  false,
+                        "publicClient":  true,
+                        "frontchannelLogout":  false,
+                        "protocol":  "openid-connect",
+                        "attributes":  {
+                                           "realm_client":  "false",
+                                           "client.use.lightweight.access.token.enabled":  "true",
+                                           "post.logout.redirect.uris":  "+",
+                                           "pkce.code.challenge.method":  "S256"
+                                       },
+                        "authenticationFlowBindingOverrides":  {
+
+                                                               },
+                        "fullScopeAllowed":  true,
+                        "nodeReRegistrationTimeout":  0,
+                        "protocolMappers":  [
+                                                {
+                                                    "id":  "e34b10f5-9892-4f2a-98b5-5a83125bfad6",
+                                                    "name":  "locale",
+                                                    "protocol":  "openid-connect",
+                                                    "protocolMapper":  "oidc-usermodel-attribute-mapper",
+                                                    "consentRequired":  false,
+                                                    "config":  {
+                                                                   "introspection.token.claim":  "true",
+                                                                   "userinfo.token.claim":  "true",
+                                                                   "user.attribute":  "locale",
+                                                                   "id.token.claim":  "true",
+                                                                   "access.token.claim":  "true",
+                                                                   "claim.name":  "locale",
+                                                                   "jsonType.label":  "String"
+                                                               }
+                                                }
+                                            ],
+                        "defaultClientScopes":  [
+                                                    "web-origins",
+                                                    "acr",
+                                                    "profile",
+                                                    "roles",
+                                                    "basic",
+                                                    "email"
+                                                ],
+                        "optionalClientScopes":  [
+                                                     "address",
+                                                     "phone",
+                                                     "offline_access",
+                                                     "organization",
+                                                     "microprofile-jwt"
+                                                 ],
+                        "access":  {
+                                       "view":  true,
+                                       "configure":  true,
+                                       "manage":  true
+                                   }
+                    }
+                ],
+    "roles":  {
+                  "realm":  [
+                                {
+                                    "id":  "56fb0658-3c69-4ac9-a960-7a6075c68e47",
+                                    "name":  "default-roles-fairenrol",
+                                    "description":  "${role_default-roles}",
+                                    "composite":  true,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                },
+                                {
+                                    "id":  "f8e8c26a-3fb4-4093-b247-f759fcb39989",
+                                    "name":  "registrar",
+                                    "composite":  false,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                },
+                                {
+                                    "id":  "b0a247da-2cb7-4ecc-a0e8-b0314afd52df",
+                                    "name":  "offline_access",
+                                    "description":  "${role_offline-access}",
+                                    "composite":  false,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                },
+                                {
+                                    "id":  "c16e4340-0468-43a0-85f0-133652cd0470",
+                                    "name":  "student",
+                                    "composite":  false,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                },
+                                {
+                                    "id":  "c43a8b30-c6e6-4576-a24b-9d296ef1cd47",
+                                    "name":  "approver",
+                                    "composite":  false,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                },
+                                {
+                                    "id":  "dfe43d90-f9be-4390-87fc-42e7324ba91a",
+                                    "name":  "uma_authorization",
+                                    "description":  "${role_uma_authorization}",
+                                    "composite":  false,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                },
+                                {
+                                    "id":  "1fd2c1ea-b015-4fa0-844c-7030438f3316",
+                                    "name":  "admin",
+                                    "description":  "System administrator role",
+                                    "composite":  false,
+                                    "clientRole":  false,
+                                    "containerId":  "96b509e8-cf5b-4f7e-a1a1-f862b5a943a9"
+                                }
+                            ]
+              },
+    "users":  [
+                  {
+                      "id":  "37f462bf-56a5-4c3f-8a02-199db13c54ca",
+                      "username":  "approver",
+                      "firstName":  "Amara",
+                      "lastName":  "Okafor",
+                      "email":  "approver@rmit.edu.vn",
+                      "emailVerified":  false,
+                      "enabled":  true,
+                      "createdTimestamp":  1792649403595,
+                      "totp":  false,
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "password",
+                                              "temporary":  false
+                                          }
+                                      ],
+                      "disableableCredentialTypes":  [
+
+                                                     ],
+                      "requiredActions":  [
+
+                                          ],
+                      "notBefore":  0,
+                      "access":  {
+                                     "manage":  true
+                                 },
+                      "realmRoles":  [
+                                         "approver"
+                                     ]
+                  },
+                  {
+                      "id":  "702c3568-25b4-4fdf-ac0f-a95f85f94300",
+                      "username":  "registrar",
+                      "firstName":  "Taylor",
+                      "lastName":  "Reed",
+                      "email":  "registrar@rmit.edu.vn",
+                      "emailVerified":  false,
+                      "enabled":  true,
+                      "createdTimestamp":  1792649403443,
+                      "totp":  false,
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "password",
+                                              "temporary":  false
+                                          }
+                                      ],
+                      "disableableCredentialTypes":  [
+
+                                                     ],
+                      "requiredActions":  [
+
+                                          ],
+                      "notBefore":  0,
+                      "access":  {
+                                     "manage":  true
+                                 },
+                      "realmRoles":  [
+                                         "registrar"
+                                     ]
+                  },
+                  {
+                      "id":  "fb9e802d-bec0-492e-aa3e-1a752a38261e",
+                      "username":  "student",
+                      "firstName":  "Avery",
+                      "lastName":  "Chen",
+                      "email":  "student@rmit.edu.vn",
+                      "emailVerified":  false,
+                      "enabled":  true,
+                      "createdTimestamp":  1792649403079,
+                      "totp":  false,
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "password",
+                                              "temporary":  false
+                                          }
+                                      ],
+                      "disableableCredentialTypes":  [
+
+                                                     ],
+                      "requiredActions":  [
+
+                                          ],
+                      "notBefore":  0,
+                      "access":  {
+                                     "manage":  true
+                                 },
+                      "realmRoles":  [
+                                         "student"
+                                     ]
+                  },
+                  {
+                      "id":  "f72d2341-cfd9-4117-9b7d-57b37a479bd2",
+                      "username":  "admin",
+                      "firstName":  "Admin",
+                      "lastName":  "System",
+                      "email":  "admin@rmit.edu.vn",
+                      "emailVerified":  true,
+                      "enabled":  true,
+                      "credentials":  [
+                                          {
+                                              "type":  "password",
+                                              "value":  "password",
+                                              "temporary":  false
+                                          }
+                                      ],
+                      "realmRoles":  [
+                                         "admin",
+                                         "registrar"
+                                     ]
+                  }
+              ]
 }
